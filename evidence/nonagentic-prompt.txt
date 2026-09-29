@@ -1,0 +1,90 @@
+Complete the following Python maintenance task. You cannot access the
+repository, edit files, or execute tests. Return only the complete corrected
+contents of calculator.py. Do not include Markdown fences, explanations, or
+unrelated changes.
+
+================================================================
+TASK.md
+================================================================
+# T01: Correct Discount Validation
+
+Correct the `apply_discount` function in `src/calculator.py`.
+
+Requirements:
+
+- A negative price must raise `ValueError`.
+- A discount below 0 must raise `ValueError`.
+- A discount above 100 must raise `ValueError`.
+- Valid results must be rounded to two decimal places.
+- Do not modify `average` or `add`.
+- Do not change unrelated behavior.
+- All existing tests must pass.
+
+Expected baseline result:
+- Exactly three tests fail.
+- The failures must be:
+  test_negative_price_raises
+  test_negative_discount_raises
+  test_discount_over_100_raises
+- All average and add tests must pass.
+
+================================================================
+CURRENT CONTENTS OF src/calculator.py
+================================================================
+def add(a: float, b: float) -> float:
+    return a + b
+
+def apply_discount(price: float, discount_percent: float) -> float:
+    """
+    Apply a percentage discount and round to 2 decimal places.
+    Bug: incorrectly handles negative prices and discounts outside 0-100.
+    """
+    discounted = price * (1 - discount_percent / 100)
+    return round(discounted, 2)
+
+def average(numbers: list[float]) -> float:
+    """
+    Return the average of a non-empty list.
+    """
+    if not numbers:
+        raise ValueError("numbers cannot be empty")
+    return sum(numbers) / len(numbers)
+
+================================================================
+BASELINE FAILING-TEST OUTPUT
+================================================================
+test_discount_over_100_raises (test_calculator.TestDiscount.test_discount_over_100_raises) ... FAIL
+test_negative_discount_raises (test_calculator.TestDiscount.test_negative_discount_raises) ... FAIL
+test_negative_price_raises (test_calculator.TestDiscount.test_negative_price_raises) ... FAIL
+
+======================================================================
+FAIL: test_discount_over_100_raises (test_calculator.TestDiscount.test_discount_over_100_raises)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tests/test_calculator.py", line 17, in test_discount_over_100_raises
+    with self.assertRaises(ValueError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_negative_discount_raises (test_calculator.TestDiscount.test_negative_discount_raises)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tests/test_calculator.py", line 21, in test_negative_discount_raises
+    with self.assertRaises(ValueError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_negative_price_raises (test_calculator.TestDiscount.test_negative_price_raises)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tests/test_calculator.py", line 13, in test_negative_price_raises
+    with self.assertRaises(ValueError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.002s
+
+FAILED (failures=3)

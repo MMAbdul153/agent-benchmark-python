@@ -1,0 +1,15 @@
+T01 Starting-State SHA-256 Verification
+Recorded (UTC): 2026-09-29T19:13:54Z
+
+--- src/calculator.py ---
+2110ce52b93deaad785b3011d464164f2c079aefffeff43e21eb2799976c1b39 *task_templates/T01_discount/src/calculator.py
+2110ce52b93deaad785b3011d464164f2c079aefffeff43e21eb2799976c1b39 *experimental_runs/T01-agentic/src/calculator.py
+2110ce52b93deaad785b3011d464164f2c079aefffeff43e21eb2799976c1b39 *experimental_runs/T01-nonagentic/src/calculator.py
+
+--- tests/test_calculator.py ---
+156eca512104db839199b34d1d0d9b3a9e9248b422cdcc4ebb43926259f02a73 *task_templates/T01_discount/tests/test_calculator.py
+156eca512104db839199b34d1d0d9b3a9e9248b422cdcc4ebb43926259f02a73 *experimental_runs/T01-agentic/tests/test_calculator.py
+156eca512104db839199b34d1d0d9b3a9e9248b422cdcc4ebb43926259f02a73 *experimental_runs/T01-nonagentic/tests/test_calculator.py
+
+RESULT: all three src/calculator.py hashes match; all three tests/test_calculator.py hashes match.
+Both T01 run directories start from byte-identical files.

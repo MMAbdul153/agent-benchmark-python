@@ -1,1 +1,3 @@
 task,condition,system,run,completed,tests_passed,tests_total,regressions,elapsed_seconds,model_turns,notes
+T01,agentic,Claude Code in VS Code,1,1,12,12,0,45,1,"Wall-clock elapsed including file inspection, edit, and test execution"
+T01,non-agentic,ChatGPT browser chat,1,1,12,12,0,4.32,1,"Model response time only; output applied verbatim, not directly comparable to agentic wall-clock"

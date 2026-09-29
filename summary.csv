@@ -1,0 +1,3 @@
+condition,attempts,completed,completion_rate,tests_passed,tests_total,regressions,elapsed_seconds,model_turns
+agentic,1,1,100.0,12,12,0,45,1
+non-agentic,1,1,100.0,12,12,0,4.32,1
