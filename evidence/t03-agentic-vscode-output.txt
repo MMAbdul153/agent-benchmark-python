@@ -1,0 +1,39 @@
+T03 — Agentic condition, Claude Code in VS Code (official run)
+Run folder: experimental_runs/T03-agentic/
+
+Agent summary:
+Added a TestAdd class with 4 tests to tests/test_calculator.py: positive
+integers, floats (assertAlmostEqual), negative numbers (one negative + one
+positive, and two negatives), and large values (billions). Existing tests and
+src/calculator.py left unchanged. Agent reports it only read/edited files
+inside experimental_runs/T03-agentic/.
+
+Start timestamp: 2026-10-27T13:00:15.9471145-05:00
+End timestamp:   2026-10-27T13:00:25.0591266-05:00
+Elapsed seconds (end - start): 9.11
+Model turns: 1 (4 tool calls: start timestamp, file read, edit, test run + end timestamp)
+
+Note: as with T02, the agent did not independently re-run the pre-change
+baseline inside this session. The starting file was byte-identical to
+task_templates/T03_add_tests/tests/test_calculator.py, whose baseline was
+separately verified (see evidence/t03-baseline-output.txt: 8 tests, 0
+failures, no TestAdd class present).
+
+Final test output (post-change):
+test_add_floats (test_calculator.TestAdd.test_add_floats) ... ok
+test_add_large_numbers (test_calculator.TestAdd.test_add_large_numbers) ... ok
+test_add_negative_numbers (test_calculator.TestAdd.test_add_negative_numbers) ... ok
+test_add_positive_integers (test_calculator.TestAdd.test_add_positive_integers) ... ok
+test_average_non_empty (test_calculator.TestAverage.test_average_non_empty) ... ok
+test_average_single_element (test_calculator.TestAverage.test_average_single_element) ... ok
+test_empty_list_raises (test_calculator.TestAverage.test_empty_list_raises) ... ok
+test_discount_over_100_raises (test_calculator.TestDiscount.test_discount_over_100_raises) ... ok
+test_negative_discount_raises (test_calculator.TestDiscount.test_negative_discount_raises) ... ok
+test_negative_price_raises (test_calculator.TestDiscount.test_negative_price_raises) ... ok
+test_rounding (test_calculator.TestDiscount.test_rounding) ... ok
+test_valid_discount (test_calculator.TestDiscount.test_valid_discount) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.002s
+
+OK

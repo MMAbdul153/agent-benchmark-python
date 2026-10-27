@@ -1,0 +1,454 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{newtxtext,newtxmath}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{fancyhdr}
+\usepackage{microtype}
+\usepackage{url}
+
+% ------------------------------------------------------------
+% Document style (reused from Midterm Project Report)
+% ------------------------------------------------------------
+\definecolor{linkblue}{HTML}{1A4F8B}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=linkblue,
+    urlcolor=linkblue,
+    citecolor=linkblue,
+    pdftitle={Senior Seminar I Progress Report 3},
+    pdfauthor={Musa Abdulrafiu}
+}
+
+\setstretch{1.15}
+\setlength{\parindent}{0.5in}
+\setlength{\parskip}{0.35em}
+\setlist[itemize]{topsep=0.25em,itemsep=0.15em}
+\captionsetup{font=small,labelfont=bf}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Senior Seminar I}
+\rhead{Progress Report 3}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ------------------------------------------------------------
+% Student/project information
+% ------------------------------------------------------------
+\newcommand{\SubmissionDate}{[FILL IN TODAY'S SUBMISSION DATE]}
+
+\newcommand{\RepoURL}{https://github.com/MMAbdul153/agent-benchmark-python}
+
+\newcommand{\StudentName}{Musa Abdulrafiu}
+\newcommand{\InstructorName}{Dr.\ Ning Zhang}
+\newcommand{\CourseName}{Senior Seminar I}
+
+\newcommand{\AgentName}{Claude Code in VS Code}
+\newcommand{\LLMName}{ChatGPT browser chat}
+
+% ------------------------------------------------------------
+% Screenshot placeholder / auto-image command.
+%
+% \ScreenshotPlaceholder{description}{filename-without-extension} checks
+% whether images/<filename>.png already exists:
+%   - If it does, it's included automatically as the figure -- no further
+%     edits to this .tex file needed.
+%   - If it doesn't (yet), a labeled dashed box is shown instead, naming
+%     exactly what to capture and what to save it as.
+%
+% So the workflow is simply: save a screenshot to images/<filename>.png
+% using the exact suggested name, recompile, and it appears in place of the
+% box automatically. Nothing else in this file needs to change.
+% ------------------------------------------------------------
+\newcommand{\ScreenshotPlaceholderBox}[2]{%
+  \fbox{\begin{minipage}[c][0.22\textheight][c]{0.92\textwidth}
+    \centering
+    \vspace{0.5em}
+    {\large\bfseries [ SCREENSHOT NEEDED ]}\\[0.6em]
+    #1\\[0.6em]
+    {\small\ttfamily Suggested filename: images/#2.png}
+    \vspace{0.5em}
+  \end{minipage}}%
+}
+\newcommand{\ScreenshotPlaceholder}[2]{%
+  \IfFileExists{images/#2.png}{%
+    \includegraphics[width=0.95\textwidth]{images/#2.png}%
+  }{%
+    \ScreenshotPlaceholderBox{#1}{#2}%
+  }%
+}
+
+\begin{document}
+
+% ------------------------------------------------------------
+% Title page (its own page, matching the Midterm Report's style)
+% ------------------------------------------------------------
+\begin{titlepage}
+    \centering
+    \vspace*{1.15in}
+
+    {\Large \textbf{\CourseName}\par}
+    \vspace{0.35in}
+
+    {\LARGE \textbf{Progress Report 3}\par}
+    \vspace{0.25in}
+
+    {\Large \textbf{Benchmarking Autonomous AI Coding Agents Against Conventional LLM Code Generation}\par}
+    \vspace{0.2in}
+
+    {\large Post-Midterm Update: Weeks 8--9\par}
+
+    \vfill
+
+    \begin{tabular}{rl}
+        \textbf{Student:} & \StudentName \\
+        \textbf{Instructor:} & \InstructorName \\
+        \textbf{Course:} & \CourseName \\
+        \textbf{Submission Date:} & \SubmissionDate \\
+        \textbf{GitHub Repository:} &
+        \href{\RepoURL}{\texttt{github.com/MMAbdul153/agent-benchmark-python}} \\
+    \end{tabular}
+
+    \vfill
+\end{titlepage}
+
+% ------------------------------------------------------------
+\section{Purpose of This Report}
+
+The Midterm Project Report (Weeks 1--7) established the benchmark pipeline and
+reported one completed experimental comparison: Task T01 (discount validation),
+evaluated under both an agentic workflow (\AgentName) and a non-agentic workflow
+(\LLMName), with both conditions passing 12 of 12 tests and 0 regressions.
+
+This report documents work since the midterm on Task T02 (empty-list average
+validation) and Task T03 (add-function test generation). Both tasks are now
+fully closed out in both conditions (agentic and non-agentic), verified by
+actually executing the test suite, using the same systems as T01: \AgentName{}
+for the agentic condition and \LLMName{} for the non-agentic condition. In
+keeping with the project's evidentiary standard, this report distinguishes
+clearly between verified results and work that remains pending.
+
+% ------------------------------------------------------------
+\section{T02 Task Definition (Unchanged from Midterm Plan)}
+
+Task T02 requires correcting the \texttt{average} function in
+\texttt{src/calculator.py} so that:
+
+\begin{itemize}
+    \item A nonempty list returns its arithmetic average.
+    \item A single-element list returns that element.
+    \item An empty list raises \texttt{ValueError} (the original implementation
+    incorrectly returned \texttt{0.0}).
+    \item \texttt{apply\_discount} and \texttt{add} are left unmodified.
+\end{itemize}
+
+The expected baseline result, documented when the T02 task template was created
+in Weeks 5--6, is exactly one failing test, \texttt{test\_empty\_list\_raises},
+out of 12 total tests.
+
+% ------------------------------------------------------------
+\section{Work Completed and Verified: T02}
+
+Following the same experimental-control pattern used for T01, isolated run
+folders were created under \texttt{experimental\_runs/}:
+\texttt{T02-agentic/} and \texttt{T02-nonagentic/}, each seeded from the
+unmodified \texttt{task\_templates/T02\_average} starting state so that neither
+condition's attempt can contaminate the other.
+
+\textbf{Baseline (verified).} The unmodified T02 code was executed against the
+12-test suite:
+
+\begin{verbatim}
+cd task_templates/T02_average
+python -m unittest discover -s tests -p "test_calculator.py" -v
+\end{verbatim}
+
+Result: 12 tests run, exactly 1 failure (\texttt{test\_empty\_list\_raises}),
+0 errors, matching the TASK.md specification. Full output saved to
+\texttt{evidence/t02-baseline-output.txt}.
+
+\begin{figure}[H]
+\centering
+\ScreenshotPlaceholder{T02 baseline test execution, showing 12 tests run and
+1 failure (\texttt{test\_empty\_list\_raises}).}{t02-baseline}
+\caption{T02 baseline test execution before any fix is applied.}
+\label{fig:t02-baseline}
+\end{figure}
+
+\textbf{Agentic fix (verified).} The T02 agentic attempt was run with
+\AgentName{}, scoped to only the \texttt{experimental\_runs/T02-agentic/}
+folder. The agent changed
+\texttt{average} to raise \texttt{ValueError("numbers must not be empty")} on
+an empty list, leaving \texttt{apply\_discount}, \texttt{add}, and the test
+file unchanged. It self-measured elapsed time using real start and end shell
+timestamps (\texttt{2026-10-27T12:55:14} to \texttt{12:55:24}), yielding
+\textbf{9.58 seconds} across \textbf{1}
+conversational turn (3 tool calls). The final run produced 12/12 tests
+passing, 0 regressions. The agent did not independently re-run the pre-fix
+baseline; the starting file was byte-identical to the separately verified
+\texttt{task\_templates/T02\_average} baseline (12 tests, 1 failure --
+\texttt{test\_empty\_list\_raises}). Full output saved to
+\texttt{evidence/t02-agentic-vscode-output.txt}. Note the 9.58-second figure
+measures only agent-tool time between its own timestamp commands, not the
+full human-observed wall-clock session used for T01's 45.10-second figure, so
+the two are not strictly comparable either.
+
+\begin{figure}[H]
+\centering
+\ScreenshotPlaceholder{Claude Code in VS Code, scoped to
+experimental\_runs/T02-agentic/, showing the edited average() function
+and/or the agent's reported timestamps.}{t02-agentic-session}
+\caption{T02 agentic condition: Claude Code in VS Code editing
+\texttt{average()}.}
+\label{fig:t02-agentic-session}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\ScreenshotPlaceholder{Final T02 agentic test run, showing 12/12 tests
+passing after the fix.}{t02-agentic-final}
+\caption{T02 final test evidence, official \AgentName{} result.}
+\label{fig:t02-agentic-final}
+\end{figure}
+
+\textbf{Non-agentic attempt (official, verified).} The static prompt packet
+(\texttt{evidence/t02-nonagentic-prompt.txt}), following the same format used
+for the T01 non-agentic condition with the real baseline output inserted, was
+submitted to \LLMName. Its returned code was applied verbatim to
+\texttt{experimental\_runs/T02-nonagentic/src/calculator.py} with no manual
+correction: \texttt{average} now raises \texttt{ValueError("numbers cannot be
+empty")} on an empty list, with \texttt{apply\_discount} and \texttt{add}
+unchanged. Elapsed time was measured with an external stopwatch (prompt
+submission to response finished rendering), the same method used for T01's
+non-agentic condition: \textbf{9.03 seconds}, 1 turn. Re-running the test
+suite confirmed 12/12 tests passing, 0 regressions. Full output saved to
+\texttt{evidence/t02-nonagentic-output.txt}. Because this timing method
+matches T01's non-agentic measurement, the 9.03s figure is directly
+comparable to T01's 4.32s -- but neither is comparable to any agentic row,
+which uses a different timing definition (see Section~1 and Section~3).
+
+\begin{figure}[H]
+\centering
+\ScreenshotPlaceholder{ChatGPT browser chat: the submitted T02 non-agentic
+prompt and its returned code.}{t02-nonagentic-chat}
+\caption{T02 non-agentic condition: ChatGPT prompt and response.}
+\label{fig:t02-nonagentic-chat}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\ScreenshotPlaceholder{Final T02 non-agentic test run, after applying
+ChatGPT's returned code verbatim.}{t02-nonagentic-final}
+\caption{T02 final test evidence, non-agentic (\LLMName) result.}
+\label{fig:t02-nonagentic-final}
+\end{figure}
+
+% ------------------------------------------------------------
+\section{Work Completed and Verified: T03}
+
+The same pattern was applied to T03 (add-function test generation), with
+isolated folders \texttt{experimental\_runs/T03-agentic/} and
+\texttt{T03-nonagentic/} seeded from \texttt{task\_templates/T03\_add\_tests}.
+
+\textbf{Baseline (verified).}
+
+\begin{verbatim}
+cd task_templates/T03_add_tests
+python -m unittest discover -s tests -p "test_calculator.py" -v
+\end{verbatim}
+
+Result: 8 tests run, 0 failures, 0 errors — only \texttt{TestDiscount} and
+\texttt{TestAverage} exist before this task, as specified. A passing baseline
+does not indicate completion, since the required \texttt{TestAdd} tests are
+the task itself. Full output saved to \texttt{evidence/t03-baseline-output.txt}.
+
+\begin{figure}[H]
+\centering
+\ScreenshotPlaceholder{T03 baseline test execution, showing 8 tests run, 0
+failures, and no TestAdd class present yet.}{t03-baseline}
+\caption{T03 baseline test execution before any tests are added.}
+\label{fig:t03-baseline}
+\end{figure}
+
+\textbf{Agentic test generation (verified).} The T03 agentic attempt was run
+with \AgentName{}, scoped to only the
+\texttt{experimental\_runs/T03-agentic/} folder. The agent added a
+\texttt{TestAdd} class with four tests -- positive integers, floating-point
+values, negative numbers (one negative plus one positive, and two negatives),
+and large values in the billions -- leaving \texttt{add}, \texttt{apply\_discount},
+\texttt{average}, and all existing tests unchanged. It self-reported reading
+and editing files only inside its assigned run folder. Using real start/end
+shell timestamps, elapsed time was \textbf{9.11 seconds} across \textbf{1}
+conversational turn (4 tool calls). The final run produced 12/12 tests
+passing, 0 regressions. As with T02, the agent did not independently re-run
+the pre-change baseline; the starting file was byte-identical to the
+separately verified \texttt{task\_templates/T03\_add\_tests} baseline (8
+tests, 0 failures, no \texttt{TestAdd} present). Full output saved to
+\texttt{evidence/t03-agentic-vscode-output.txt}.
+
+\begin{figure}[H]
+\centering
+\ScreenshotPlaceholder{Claude Code in VS Code, scoped to
+experimental\_runs/T03-agentic/, showing the added TestAdd class.}{t03-agentic-session}
+\caption{T03 agentic condition: Claude Code in VS Code adding
+\texttt{TestAdd}.}
+\label{fig:t03-agentic-session}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\ScreenshotPlaceholder{Final T03 agentic test run, showing 12/12 tests
+passing (8 existing + 4 new).}{t03-agentic-final}
+\caption{T03 final test evidence, official \AgentName{} result.}
+\label{fig:t03-agentic-final}
+\end{figure}
+
+\textbf{Non-agentic attempt (official, verified).} The corresponding prompt
+packet (\texttt{evidence/t03-nonagentic-prompt.txt}, with the real baseline
+output inserted) was submitted to \LLMName. Its returned test file was
+applied with one correction: the pasted response read
+\texttt{if name == "main":} instead of
+\texttt{if \_\_name\_\_ == "\_\_main\_\_":} -- a markdown-paste artifact (chat
+markdown's bold-text parsing strips double underscores), not a logic change,
+so the literal dunders were restored rather than treated as part of the
+model's output. No test logic or assertion was altered. The returned
+\texttt{TestAdd} class (4 tests: positive integers, floats, negative numbers,
+numbers at the \(10^{15}\) scale) was otherwise applied verbatim, with
+\texttt{TestDiscount} and \texttt{TestAverage} unchanged. External stopwatch
+time (same method as T01 and T02's non-agentic conditions): \textbf{5.28
+seconds}, 1 turn. Re-running the test suite confirmed 12/12 tests passing, 0
+regressions. Full output saved to \texttt{evidence/t03-nonagentic-output.txt}.
+
+\begin{figure}[H]
+\centering
+\ScreenshotPlaceholder{ChatGPT browser chat: the submitted T03 non-agentic
+prompt and its returned test file.}{t03-nonagentic-chat}
+\caption{T03 non-agentic condition: ChatGPT prompt and response.}
+\label{fig:t03-nonagentic-chat}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\ScreenshotPlaceholder{Final T03 non-agentic test run, after applying
+ChatGPT's returned test file verbatim.}{t03-nonagentic-final}
+\caption{T03 final test evidence, non-agentic (\LLMName) result.}
+\label{fig:t03-nonagentic-final}
+\end{figure}
+
+% ------------------------------------------------------------
+\section{Verification Status Summary}
+
+\begin{table}[H]
+\centering
+\caption{T02 and T03 verification status, this reporting period}
+\label{tab:t02-t03-status}
+\small
+\begin{tabularx}{\textwidth}{l l c c c X}
+\toprule
+\textbf{Task} & \textbf{Condition} & \textbf{Tests} & \textbf{Regressions} & \textbf{Verified} & \textbf{Notes} \\
+\midrule
+T02 & Agentic (\AgentName) & 12/12 & 0 & \textbf{Yes} & 9.58s, 1 turn; see Section~3 \\
+T02 & Non-agentic & 12/12 & 0 & \textbf{Yes} & 9.03s (stopwatch, same method as T01) \\
+T03 & Agentic (\AgentName) & 12/12 & 0 & \textbf{Yes} & 9.11s, 1 turn; see Section~4 \\
+T03 & Non-agentic & 12/12 & 0 & \textbf{Yes} & 5.28s (stopwatch, same method as T01/T02) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+All six cells above (T01--T03, agentic and non-agentic) use the same two
+systems throughout: \AgentName{} for every agentic attempt and \LLMName{} for
+every non-agentic attempt, so the agentic condition is directly comparable
+across tasks.
+
+\begin{figure}[H]
+\centering
+\ScreenshotPlaceholder{results.csv showing the T01 rows alongside the new,
+fully verified T02/T03 rows.}{results-csv-update}
+\caption{Updated structured result log after this reporting period.}
+\label{fig:results-csv-update}
+\end{figure}
+
+% ------------------------------------------------------------
+\section{Remaining Steps}
+
+All four T02/T03 experimental cells (agentic and non-agentic, both tasks) are
+now complete and verified. What remains:
+
+\begin{enumerate}
+    \item Capture terminal screenshots for the T02 and T03 baseline, official
+    agentic, and non-agentic results, to be added as figures in the next
+    report revision (placeholders already inserted below).
+    \item Decide whether to run the SHA-256 isolation check
+    (\small\texttt{evidence/t02-t03-isolation-check.ps1}\normalsize)
+    retroactively or treat the scoped-VS-Code-workspace control as
+    sufficient; note the choice explicitly as a limitation either way.
+    \item Begin repeated trials for T01--T03 using the new automation
+    scripts (\texttt{scripts/bench\_reset.py}, \texttt{scripts/bench\_log.py}),
+    since every result so far is a single trial per condition per task.
+\end{enumerate}
+
+% ------------------------------------------------------------
+\section{Updated Plan for the Remainder of the Semester}
+
+\begin{enumerate}
+    \item Complete the non-agentic conditions for T02 and T03 (steps above).
+    \item Run repeated trials for both the agentic and non-agentic conditions
+    across multiple tasks.
+    \item Standardize timing definitions and measurement procedures across all
+    conditions and systems, including the T02/T03 agentic system-difference
+    noted in Section~1.
+    \item Add a simple code-quality rubric addressing readability,
+    maintainability, scope of change, and regressions.
+    \item Analyze quantitative results and qualitative failure modes for the
+    final report.
+\end{enumerate}
+
+% ------------------------------------------------------------
+\section{Evidence Produced This Period}
+
+\begin{itemize}
+    \item \texttt{experimental\_runs/T02-agentic/} --- official \AgentName{}
+    fix applied and verified (12/12 tests, 0 regressions, 9.58s, 1 turn).
+    \item \texttt{experimental\_runs/T03-agentic/} --- official \AgentName{}
+    TestAdd class added and verified (12/12 tests, 0 regressions, 9.11s,
+    1 turn).
+    \item \texttt{experimental\_runs/T02-nonagentic/} --- official \LLMName{}
+    fix applied and verified (12/12 tests, 0 regressions, 9.03s, 1 turn).
+    \item \texttt{experimental\_runs/T03-nonagentic/} --- official \LLMName{}
+    TestAdd class applied and verified (12/12 tests, 0 regressions, 5.28s,
+    1 turn).
+    \item \texttt{evidence/t02-nonagentic-prompt.txt},
+    \texttt{evidence/t03-nonagentic-prompt.txt} --- static prompt packets for
+    the non-agentic conditions, with real baseline output inserted and a note
+    directing external stopwatch timing instead of model self-report.
+    \item \texttt{evidence/t02-nonagentic-output.txt},
+    \texttt{evidence/t03-nonagentic-output.txt} --- official, verified T02 and
+    T03 non-agentic results (\LLMName).
+    \item \texttt{evidence/t02-baseline-output.txt},
+    \texttt{evidence/t03-baseline-output.txt} --- verified baseline terminal
+    output.
+    \item \small\texttt{evidence/t02-agentic-vscode-output.txt},
+    \texttt{evidence/t03-agentic-vscode-output.txt}\normalsize{} --- official,
+    verified T02 and T03 agentic results (\AgentName).
+    \item \texttt{evidence/t02-t03-isolation-check.ps1} --- SHA-256 isolation
+    check script, run before/after each agentic session to confirm no file
+    outside the active run folder changed.
+    \item \texttt{results.csv}, \texttt{summary.csv} --- updated with verified
+    rows for all six T02/T03 cells (agentic and non-agentic, both tasks).
+\end{itemize}
+
+Terminal-output screenshots are not yet included in this report; they will be
+added once captured, alongside the non-agentic results, in the next revision.
+
+\end{document}

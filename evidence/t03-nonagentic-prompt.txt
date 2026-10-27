@@ -1,0 +1,127 @@
+Complete the following Python test-generation task. You cannot access the
+repository, edit files, or execute tests. Return only the complete contents of
+tests/test_calculator.py, including your newly added tests. Do not include
+Markdown fences, explanations, or unrelated changes. Do not modify any existing
+test methods.
+
+================================================================
+TASK.md
+================================================================
+# T03: Generate Unit Tests for Add
+
+Add unit tests for the `add` function in `src/calculator.py`.
+
+The new tests must cover:
+
+- Positive integers
+- Floating-point values
+- Negative numbers
+- Large numerical values
+
+Requirements:
+
+- Use Python's built-in `unittest` framework.
+- Include meaningful assertions.
+- Do not modify the implementation of `add`.
+- Do not modify `apply_discount` or `average`.
+- All existing and newly created tests must pass.
+
+Expected baseline result:
+- All existing discount and average tests pass.
+- No TestAdd class or add tests exist before the experiment.
+- The missing required add tests are the task, so a passing baseline test command
+  does not mean the assignment is already complete.
+
+================================================================
+CURRENT CONTENTS OF src/calculator.py
+================================================================
+def add(a: float, b: float) -> float:
+    return a + b
+
+def apply_discount(price: float, discount_percent: float) -> float:
+    """
+    Apply a percentage discount and round to 2 decimal places.
+    """
+    if price < 0:
+        raise ValueError("price cannot be negative")
+    if discount_percent < 0 or discount_percent > 100:
+        raise ValueError("discount_percent must be between 0 and 100")
+    discounted = price * (1 - discount_percent / 100)
+    return round(discounted, 2)
+
+def average(numbers: list[float]) -> float:
+    """
+    Return the average of a non-empty list.
+    """
+    if not numbers:
+        raise ValueError("numbers cannot be empty")
+    return sum(numbers) / len(numbers)
+
+================================================================
+CURRENT CONTENTS OF tests/test_calculator.py
+================================================================
+# tests/test_calculator.py
+import unittest
+from src.calculator import add, apply_discount, average
+
+class TestDiscount(unittest.TestCase):
+    def test_valid_discount(self):
+        self.assertEqual(apply_discount(100.0, 10.0), 90.0)
+
+    def test_rounding(self):
+        self.assertEqual(apply_discount(99.99, 25.0), 74.99)
+
+    def test_negative_price_raises(self):
+        with self.assertRaises(ValueError):
+            apply_discount(-10.0, 10.0)
+
+    def test_discount_over_100_raises(self):
+        with self.assertRaises(ValueError):
+            apply_discount(100.0, 150.0)
+
+    def test_negative_discount_raises(self):
+        with self.assertRaises(ValueError):
+            apply_discount(100.0, -5.0)
+
+class TestAverage(unittest.TestCase):
+    def test_average_non_empty(self):
+        self.assertAlmostEqual(average([1, 2, 3, 4]), 2.5)
+
+    def test_average_single_element(self):
+        self.assertAlmostEqual(average([10]), 10.0)
+
+    def test_empty_list_raises(self):
+        with self.assertRaises(ValueError):
+            average([])
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+================================================================
+BASELINE TEST OUTPUT (verified, from real terminal run)
+================================================================
+test_average_non_empty (test_calculator.TestAverage.test_average_non_empty) ... ok
+test_average_single_element (test_calculator.TestAverage.test_average_single_element) ... ok
+test_empty_list_raises (test_calculator.TestAverage.test_empty_list_raises) ... ok
+test_discount_over_100_raises (test_calculator.TestDiscount.test_discount_over_100_raises) ... ok
+test_negative_discount_raises (test_calculator.TestDiscount.test_negative_discount_raises) ... ok
+test_negative_price_raises (test_calculator.TestDiscount.test_negative_price_raises) ... ok
+test_rounding (test_calculator.TestDiscount.test_rounding) ... ok
+test_valid_discount (test_calculator.TestDiscount.test_valid_discount) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.001s
+
+OK
+
+================================================================
+A NOTE ON TIMING (read before you paste this into ChatGPT)
+================================================================
+Do not ask the model to report how long it took — it has no clock and no way
+to measure elapsed time, so any number it gives would be a guess presented as
+data. Instead, time this yourself: start a stopwatch the moment you submit
+this prompt, and stop it the moment the response finishes rendering. Record
+that value as the non-agentic elapsed time, the same way the T01 non-agentic
+condition was measured (model response time only, not comparable to agentic
+wall-clock time).

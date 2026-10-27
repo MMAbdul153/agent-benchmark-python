@@ -1,0 +1,38 @@
+T03 — Non-agentic condition, ChatGPT browser chat
+Run folder: experimental_runs/T03-nonagentic/
+
+Submitted prompt: evidence/t03-nonagentic-prompt.txt (task spec, unmodified
+source, real verified baseline output inserted).
+
+Returned tests/test_calculator.py, applied verbatim with ONE correction: the
+pasted response contained "if name == \"main\":" instead of
+"if __name__ == \"__main__\":" -- this is a markdown-paste artifact (chat
+markdown's bold-text parsing strips double underscores), not a logic change,
+and the literal dunders were restored so the file is valid Python. No test
+logic, assertions, or existing test methods were altered.
+
+New TestAdd class (4 tests): positive integers, floats, negative numbers,
+large numbers (10**15 scale). TestDiscount and TestAverage left unchanged
+from the pristine baseline.
+
+External stopwatch time: 5.28 seconds (prompt submission to response
+finished rendering; same method as T01's and T02's non-agentic conditions).
+
+Final test output (verified by running the test suite against this file):
+test_add_floats (test_calculator.TestAdd) ... ok
+test_add_integers (test_calculator.TestAdd) ... ok
+test_add_large_numbers (test_calculator.TestAdd) ... ok
+test_add_negative (test_calculator.TestAdd) ... ok
+test_average_non_empty (test_calculator.TestAverage) ... ok
+test_average_single_element (test_calculator.TestAverage) ... ok
+test_empty_list_raises (test_calculator.TestAverage) ... ok
+test_discount_over_100_raises (test_calculator.TestDiscount) ... ok
+test_negative_discount_raises (test_calculator.TestDiscount) ... ok
+test_negative_price_raises (test_calculator.TestDiscount) ... ok
+test_rounding (test_calculator.TestDiscount) ... ok
+test_valid_discount (test_calculator.TestDiscount) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.001s
+
+OK

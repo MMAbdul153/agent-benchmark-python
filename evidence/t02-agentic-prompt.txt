@@ -1,0 +1,39 @@
+Paste this into Claude Code in VS Code. Before pasting, open VS Code with
+ONLY this folder as the workspace root (run this in PowerShell first):
+
+code "C:\Users\Musaa\Desktop\agent-benchmark-python\experimental_runs\T02-agentic"
+
+--------------------------------------------------------------------------
+
+SCOPE: You may only read and edit files inside this workspace folder
+(experimental_runs/T02-agentic/). Do not reference, open, or use information
+from any other folder in the agent-benchmark-python repository, including
+task_templates/, other experimental_runs/ subfolders, or the repository root
+src/ or tests/, even if you can technically reach them. If you believe you
+need to look outside this folder, stop and say so instead of doing it.
+
+Before doing anything else, run a shell command that prints the current
+timestamp (for example, in PowerShell: Get-Date -Format o) and note the
+printed value as the start time.
+
+Then read TASK.md in experimental_runs/T02-agentic/ for the task
+requirements. Inspect src/calculator.py and tests/test_calculator.py in this
+folder only. Make the minimal code change to src/calculator.py needed to
+satisfy TASK.md. Do not modify tests/test_calculator.py, and do not modify
+apply_discount or add.
+
+Run the test suite to verify your change:
+python -m unittest discover -s tests -p "test_calculator.py" -v
+
+If any test fails, continue fixing until all tests pass with zero
+regressions (no test that was passing before your change may fail after it).
+
+Once all tests pass, run the same timestamp command again and note the
+printed value as the end time.
+
+Report back, in this exact format:
+- Start timestamp: <value>
+- End timestamp: <value>
+- Elapsed seconds (end minus start): <value>
+- Number of your conversational turns used to complete this task: <value>
+- Final test result (paste the full terminal output): <output>

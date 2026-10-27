@@ -1,3 +1,9 @@
 condition,attempts,completed,completion_rate,tests_passed,tests_total,regressions,elapsed_seconds,model_turns
 agentic,1,1,100.0,12,12,0,45,1
 non-agentic,1,1,100.0,12,12,0,4.32,1
+
+# Note: the two rows above are T01 only (Claude Code in VS Code vs. ChatGPT browser chat).
+# T02 and T03 are now also fully verified in both conditions (see results.csv), using the
+# same systems as T01. They are not yet merged into the aggregate rows above because each
+# task/condition still has only a single trial (n=1); aggregating now would not represent
+# a meaningful average. Repeated trials are planned before computing a combined summary.

@@ -1,0 +1,14 @@
+{
+  "T01": {
+    "template": "task_templates/T01_discount",
+    "baseline_failures": ["test_negative_price_raises", "test_negative_discount_raises", "test_discount_over_100_raises"]
+  },
+  "T02": {
+    "template": "task_templates/T02_average",
+    "baseline_failures": ["test_empty_list_raises"]
+  },
+  "T03": {
+    "template": "task_templates/T03_add_tests",
+    "baseline_failures": []
+  }
+}

@@ -1,0 +1,13 @@
+test_average_non_empty (test_calculator.TestAverage.test_average_non_empty) ... ok
+test_average_single_element (test_calculator.TestAverage.test_average_single_element) ... ok
+test_empty_list_raises (test_calculator.TestAverage.test_empty_list_raises) ... ok
+test_discount_over_100_raises (test_calculator.TestDiscount.test_discount_over_100_raises) ... ok
+test_negative_discount_raises (test_calculator.TestDiscount.test_negative_discount_raises) ... ok
+test_negative_price_raises (test_calculator.TestDiscount.test_negative_price_raises) ... ok
+test_rounding (test_calculator.TestDiscount.test_rounding) ... ok
+test_valid_discount (test_calculator.TestDiscount.test_valid_discount) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.001s
+
+OK

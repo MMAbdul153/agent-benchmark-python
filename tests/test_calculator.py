@@ -26,7 +26,7 @@ class TestAverage(unittest.TestCase):
         self.assertAlmostEqual(average([1, 2, 3, 4]), 2.5)
 
     def test_average_single_element(self):
-        self.assertAlmostEqual(average(), 10.0)
+        self.assertAlmostEqual(average([10]), 10.0)
 
     def test_empty_list_raises(self):
         with self.assertRaises(ValueError):
